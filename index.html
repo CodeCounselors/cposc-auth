@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Safeguard Your Application Data</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
+		<link rel="stylesheet" href="css/prism.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!--
+		 Violet: #6C70C4
+		 Orange:  #CB4B16
+		 Cyan: #2AA198
+		 Green: #859900
+		-->
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-background-image="img/pexels-photo-270514_lock.jpeg" >
+					<h1 class="stretch" style="color:#2AA198; text-transform: capitalize">Safeguard Your Application Data</h1>
+				</section>
+
+				<section data-background-image="img/pexels-photo-229014_road.jpeg">
+					<section class="stretch">
+						<h2>We won't be talking about</h2>
+						<ul>
+							<li>OWASP Top 10</li>
+							<li>Single Sign On / Enterprise Level</li>
+						</ul>
+					</section>
+					<section class="stretch">
+						<div data-markdown>
+							<textarea data-template>
+							## This talk is for anyone building the following:
+							- Modern (single page) Web App
+							- Progressive Web App (PWA)
+							- Mobile App
+							- Restful API
+							</textarea>
+						</div>
+					</section>
+					<section class="stretch">
+					<div data-markdown><textarea data-template>
+					## Where are we headed?
+					- A real world problem
+					- How to authenticate users
+					- How to authorize users
+					- Decisions and tradeoffs
+					</textarea></div>
+					</section>
+				</section>
+
+				<section data-background-image="img/pexels-photo-133070_film.jpeg" >
+					<div class="stretch">
+						<h2>Three main goals</h2>
+						<ol>
+							<li>Help my forgetfullnes</li>
+							<li>Treat people's data with care</li>
+							<li>Empower the people</li>
+						</ol>
+					</div>
+				</section>
+
+				<section>
+					<h2>Brought to you by</h2>
+					<img src="img/sponsors.png"/>
+				</section>
+
+				<!-- AUTHENTICATION Discussion -->
+				<section data-background-image="img/apple-desk-laptop-macbook.jpg">
+					<h2>cposc.pictoriald.com</h2>
+					<section>
+						<div data-markdown><textarea data-template>
+						## What's Missing?
+						</textarea></div>
+					</section>
+					<section>
+						<h2>Authentication!</h2>
+						<div class="fragment">
+							<h3 style="color:#859900">Answers the question:</h3>
+							"Are you who you say you are"
+						</div>
+					</section>
+					<section>
+						<div data-markdown><textarea data-template>
+						<br><br>
+						## What do we need?
+						1. Login Form <!-- .element: class="fragment" -->
+						1. User Datastore <!-- .element: class="fragment" -->
+						1. Password Management <!-- .element: class="fragment" -->
+							- Email Verification <!-- .element: class="fragment" -->
+							- Password Reset <!-- .element: class="fragment" -->
+							- Account Lockout <!-- .element: class="fragment" -->
+							- Multi-Factor Authentication (MFA) <!-- .element: class="fragment" -->
+							- Passwordless login <!-- .element: class="fragment" -->
+						</textarea></div>
+						<aside class="notes" data-markdown>
+							<textarea data-template>
+								- Before fragments: Remember the 3 main goals?
+							</textarea>
+						</aside>
+					</section>
+					<section>
+						<div data-markdown><textarea data-template>
+						<br><br>
+						## What options do we have?
+						1. Roll your own <!-- .element: class="fragment" -->
+						2. Don't roll your own (all on your own) <!-- .element: class="fragment" -->
+							- Devise (Ruby)
+							- Passport (NodeJS)
+							- Spring Security (JVM)
+						3. Don't roll your own at all <!-- .element: class="fragment" -->
+							- Auth0
+							- Okta (Stormpath)
+						</textarea></div>
+					</section>
+					<section>
+						<div data-markdown><textarea data-template>
+						## That's not all
+						1. Is JWT really better than stateful sessions? <!-- .element: class="fragment" -->
+						1. JWT Signing Options <!-- .element: class="fragment" -->
+							- HS256; Symetric (Shared Secrets)
+							- RS256; Assymetric (Public/Private Keys)
+					</textarea></div>
+					</section>
+				</section>
+
+				<!-- AUTHENTICATION Demo -->
+				<section  class="language-javascript">
+					<section>
+						<h1>Implementing Auth0 Authentication</h1>
+					</section>
+					<section>
+						<h2>The Auth0 Client Object</h2>
+						<h3>AuthService.js</h3>
+						<pre class="stretch">
+						<code data-trim contenteditable>
+import auth0 from 'auth0-js'
+...
+export default class AuthService extends EventEmitter {
+
+	auth0 = new auth0.WebAuth({
+		domain: Auth.Auth0Domain,
+		clientID: Auth.Auth0ClientId,
+		redirectUri: `${window.location.origin}/login`,
+		audience: 'https://codec.auth0.com/userinfo',
+		responseType: 'token id_token',
+		//http://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
+		scope: 'openid email profile'
+	})
+	...
+}
+                    	</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Authentication Object (client state)</h2>
+						<h3>AuthService.js</h3>
+						<pre class="stretch">
+						<code data-trim contenteditable>
+export default class AuthService extends EventEmitter {
+...
+	login() {
+		this.auth0.authorize()
+	}
+	setSession(authResult) {
+		localStorage.setItem('access_token', authResult.accessToken)
+		localStorage.setItem('id_token', authResult.idToken)
+	}
+	logout() {
+		localStorage.removeItem('access_token')
+		localStorage.removeItem('id_token')
+	}
+	getProfile() {
+		return localStorage.getItem('profile')
+	}
+}</code></pre>
+					</section>
+
+					<section>
+						<h2>Authentication Triggers</h2>
+						<h3>routes.js</h3>
+						<pre class="language-jsx stretch"><code data-trim contenteditable>
+...
+	const requireAuth = (nextState, replace) => {
+		if (!auth.loggedIn()) { replace({pathname: '/login'}) }
+	}
+	const handleAuthentication = (nextState, replace) => {
+		if (/access_token|id_token|error/.test(nextState.location.hash)) {
+			auth.handleAuthentication()
+		}
+	}
+	export const makeRoutes = () => {
+		return (
+			&lt;Route path="/" component={Container} auth={auth}&gt;
+				&lt;IndexRedirect to="/home"/&gt;
+				&lt;Route path="login" component={Login} onEnter={handleAuthentication} /&gt;
+				&lt;Route path="home" component={Home} onEnter={requireAuth}/&gt;
+			&lt;/Route&gt;
+		)
+	}
+}</code></pre>
+					</section>
+
+					<section>
+						<h2>TODO: Add Sequence Diagram</h2>
+						- Request for /home
+						- No token so trigger login
+						- Auth0 calls ack to /login with tokens
+						- Fetch profile
+						- Store/Create User
+					</section>
+
+					<section>
+						<h2>Sending the JWT</h2>
+						<h3>HttpClient.js</h3>
+						<pre class="language-javascript">
+						<code>
+import axios from 'axios'
+
+axios.interceptors.request.use(function (config) {
+	const token = localStorage.getItem('id_token')
+	config.headers['Authorization'] = 'Bearer ' + token
+	return config
+})
+
+export default axios
+                    	</code>
+						</pre>
+					</section>
+
+					<section>
+						<h2>Receiving the JWT</h2>
+						<pre class="language-javascript stretch">
+						<code data-trim contenteditable>
+const jwt = require('express-jwt')
+const jwksRsa = require('jwks-rsa')
+const app = express()
+...
+const apiMiddleware = [
+	jwt( {
+		secret: jwksRsa.expressJwtSecret({
+			cache: true,
+			rateLimit: true,
+			jwksRequestsPerMinute: 5,
+			jwksUri: `https://${auth0Domain}/.well-known/jwks.json`
+		})
+	}).unless({path: [imgRoute]}),
+	...
+]
+app.use('/api', apiMiddleware, api)</code></pre>
+					</section>
+
+					<section>
+						<h2>Lets see it in action</h2>
+						<h3>cposc-authenticate.pictoriald.com</h3>
+						<div data-markdown><textarea data-template>
+						## What's Missing? <!-- .element: class="fragment" -->
+						</textarea></div>
+					</section>
+				</section>
+
+
+				<!-- AUTHORIZATION -->
+				<section data-background-image="img/apple-desk-laptop-macbook.jpg">
+					<section>
+						<h2>Authorization!</h2>
+						<h3>Also Known As</h3>
+						<div data-markdown><textarea data-template>
+						- Identity and Access Management (IAM)
+						- Role Based Access Control
+						- Access Control List (ACL)
+						- Claims Based
+						</textarea></div>
+					</section>
+				</section>
+
+				<!-- CONCLUSION -->
+				<section>
+					<div data-markdown><textarea data-template>
+						## Resources
+						- https://auth0.com/blog/cookies-vs-tokens-definitive-guide/
+					</textarea></div>
+				</section>
+
+			</div>
+		</div>
+
+		<!--
+
+		-->
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="js/prism.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				width: 1600,
+				height: 900,
+				history: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+//					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'node_modules/reveal_external/external/external.js', async:true }
+				]
+			});
+		</script>
+	</body>
+</html>
