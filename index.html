@@ -131,14 +131,33 @@
 							- Okta (Stormpath)
 						</textarea></div>
 					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>JWT</h1>
+						<h2 class="fragment">JWT = JSON Web Token</h2>
+					</section>
+
+					<section class="stretch">
+						<h2>jwt.io</h2>
+						<img src="img/jwtio.png"/>
+						<aside class="notes" data-markdown>
+							<textarea data-template>
+								- How JWT was captured
+								- How is a JWT Generated...
+							</textarea>
+						</aside>
+					</section>
+
 					<section>
 						<div data-markdown><textarea data-template>
-						## That's not all
+						## Simple as that, right?
 						1. Is JWT really better than stateful sessions? <!-- .element: class="fragment" -->
 						1. JWT Signing Options <!-- .element: class="fragment" -->
 							- HS256; Symetric (Shared Secrets)
-							- RS256; Assymetric (Public/Private Keys)
-					</textarea></div>
+							- RS256; Assymetric (Public/Private Keys) <!-- .element: class="fragment highlight-green" -->
+						</textarea></div>
 					</section>
 				</section>
 
@@ -279,18 +298,10 @@ app.use('/api', apiMiddleware, api)</code></pre>
 
 
 				<!-- AUTHORIZATION -->
-				<section data-background-image="img/apple-desk-laptop-macbook.jpg">
-					<section>
-						<h2>Authorization!</h2>
-						<h3>Also Known As</h3>
-						<div data-markdown><textarea data-template>
-						- Identity and Access Management (IAM)
-						- Role Based Access Control
-						- Access Control List (ACL)
-						- Claims Based
-						</textarea></div>
-					</section>
+				<section data-background-image="">
+					<section data-markdown="slides/authorization.md" data-separator="^SLIDE$" />
 				</section>
+
 
 				<!-- CONCLUSION -->
 				<section>
@@ -318,6 +329,12 @@ app.use('/api', apiMiddleware, api)</code></pre>
 				width: 1600,
 				height: 900,
 				history: true,
+                markdown: {
+                    smartypants: true,
+                    highlight: function (code, language) {
+                        return Prism.highlight(code, Prism.languages[language]);
+                    }
+                },
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
