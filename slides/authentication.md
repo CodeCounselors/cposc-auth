@@ -189,18 +189,15 @@ VSLIDE
 ### https://cposc-jwt.pictoriald.com
 ## What's Missing? <!-- .element: class="fragment" -->		
 
-
-
-
-
 SLIDE
 ## Authorization!
-### Also Known As
+### Also Known As<!-- .element: class="fragment" -->
 
-- Identity and Access Management (IAM)
-- Role Based Access Control
-- Access Control List (ACL)
-- Claims Based
+- Identity and Access Management (IAM) <!-- .element: class="fragment" -->
+- Role Based Access Control <!-- .element: class="fragment" -->
+- Access Control List (ACL) <!-- .element: class="fragment" -->
+- Claims Based <!-- .element: class="fragment" -->
+
 
 VSLIDE
 ## Goals
