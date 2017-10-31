@@ -121,13 +121,20 @@
                         return Prism.highlight(code, Prism.languages[language]);
                     }
                 },
+                multiplex: {
+                    secret: null, // null so the clients do not have control of the master presentation
+                    id: 'a61f5bc5312d7ec1', // id, obtained from socket.io server
+                    url: 'https://reveal-js-multiplex-ccjbegmaii.now.sh' // Location of socket.io server
+                },
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
 //					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true },
-					{ src: 'node_modules/reveal_external/external/external.js', async:true }
+					{ src: 'node_modules/reveal_external/external/external.js', async:true },
+                    { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },
+                    { src: 'plugin/multiplex/client.js', async: true }
 				]
 			});
 		</script>
