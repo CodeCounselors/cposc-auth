@@ -47,7 +47,8 @@ VSLIDE
 
 VSLIDE
 <!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" style="color:white" -->
-![JWT.IO](img/jwtio.png) <!-- .element class="stretch" style="top: --469px; position: absolute; left: 0px" -->
+![JWT.IO](img/jwtio.png)
+<!-- .element class="stretch" data-trim contenteditable -->
 
 note:
 - How JWT was captured
@@ -66,6 +67,10 @@ VSLIDE
     
 SLIDE
 # Implementing Auth0 Authentication
+
+VSLIDE			
+## How it works
+![Auth0 Handshake](img/auth0-seq.png)
 
 VSLIDE
 ## The Auth0 Client Object
@@ -92,7 +97,7 @@ export default class AuthService extends EventEmitter {
 
 VSLIDE
 ## Authentication Object (client state)
-###AuthService.js
+### AuthService.js
 
 ```javascript
 export default class AuthService extends EventEmitter {
@@ -132,21 +137,14 @@ VSLIDE
 			&lt;Route path="/" component={Container} auth={auth}&gt;
 				&lt;IndexRedirect to="/home"/&gt;
 				&lt;Route path="login" component={Login} onEnter={handleAuthentication} /&gt;
-				&lt;Route path="home" component={Home} onEnter={requireAuth}/&gt;
+				&lt;Route path="home" component={Home} onEnter={requireAuth}>
 			&lt;/Route&gt;
 		)
 	}
 }
 ```
+<!-- .element class="stretch" data-trim contenteditable -->
 	
-VSLIDE			
-## TODO: Add Sequence Diagram<
-- Request for /home
-- No token so trigger login
-- Auth0 calls ack to /login with tokens
-- Fetch profile
-- Store/Create User
-					
 VSLIDE
 ## Sending the JWT
 ### HttpClient.js
@@ -305,15 +303,23 @@ const allowOrgRole = (orgId) => {
 ```
 <!-- .element: class="fragment" -->
 
-
 SLIDE
-## Resources
+# Summary
+### Don't Roll your own
+1. Authentication - Confirm User Identity
+1. Authorization - Confirm User Access
+    - Group Privileges into Roles
+    - Assign Roles to Users
+    - Assign Roles to Operations
 
+
+VSLIDE
+## Resources
 - https://auth0.com/blog/cookies-vs-tokens-definitive-guide/
 - https://auth0.com/blog/navigating-rs256-and-jwks/
 
 VSLIDE
 ## Thank You!
 ### @codecounselor
-### https://codecounselors.github.io/cposc-auth/
+### https://codecounselors.github.io/cposc-auth
 ### https://github.com/CodeCounselors/cposc-auth
