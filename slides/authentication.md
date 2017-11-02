@@ -37,13 +37,17 @@ VSLIDE
     - Okta (Stormpath)
 						
 VSLIDE
-# JWT
-## JWT = JSON Web Token <!-- .element: class="fragment" -->
-<!-- .element: class="stretch" -->
+<!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" style="color:white" -->
+#   
+## JWT = JSON Web Token <!-- .element: class="fragment"  style="color:white" -->
+1. Header <!-- .element: class="fragment" -->
+1. Payload <!-- .element: class="fragment" -->
+1. Signature <!-- .element: class="fragment" -->
+
 
 VSLIDE
-## jwt.io
-![JWT.IO](img/jwtio.png)
+<!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" style="color:white" -->
+![JWT.IO](img/jwtio.png) <!-- .element class="stretch" style="top: --469px; position: absolute; left: 0px" -->
 
 note:
 - How JWT was captured
@@ -51,16 +55,14 @@ note:
 
 
 VSLIDE
-## Simple as that, right?
-
-1. Is JWT really better than stateful sessions? <!-- .element: class="fragment" -->
-1. JWT Signing Options <!-- .element: class="fragment" -->
+<!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" -->
+## Simple as that, right? <!-- .element: style="color:white" -->
+1. Is JWT better than stateful sessions? <!-- .element: class="fragment" style="color:white" -->
+1. JWT Signing Options <!-- .element: class="fragment" style="color:white" -->
     - HS256; Symetric (Shared Secrets)
     - RS256; Assymetric (Public/Private Keys) <!-- .element: class="fragment highlight-green" -->
-    
-
-
-
+   
+   
     
 SLIDE
 # Implementing Auth0 Authentication
@@ -113,7 +115,7 @@ export default class AuthService extends EventEmitter {
 ```
 
 VSLIDE
-## Authentication Triggers<
+## Authentication Triggers
 ### routes.js
 ```jsx
 ...
@@ -190,7 +192,11 @@ VSLIDE
 ## What's Missing? <!-- .element: class="fragment" -->		
 
 SLIDE
+<!-- .element data-background-image="img/crosswalks.jpeg" -->
 ## Authorization!
+### Answers the question: <!-- .element style="color:#859900" class="fragment" -->
+Are you permitted to perform the action you are attempting? <!-- .element: class="fragment" -->
+
 ### Also Known As<!-- .element: class="fragment" -->
 
 - Identity and Access Management (IAM) <!-- .element: class="fragment" -->
@@ -298,3 +304,16 @@ const allowOrgRole = (orgId) => {
 }
 ```
 <!-- .element: class="fragment" -->
+
+
+SLIDE
+## Resources
+
+- https://auth0.com/blog/cookies-vs-tokens-definitive-guide/
+- https://auth0.com/blog/navigating-rs256-and-jwks/
+
+VSLIDE
+## Thank You!
+### @codecounselor
+### https://codecounselors.github.io/cposc-auth/
+### https://github.com/CodeCounselors/cposc-auth
