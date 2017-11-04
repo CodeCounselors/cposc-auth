@@ -39,20 +39,20 @@
 
 				<section data-background-image="img/pexels-photo-229014_road.jpeg">
 					<section class="stretch">
-						<h2>We won't be talking about</h2>
+						<h2 class="fragment">We won't be talking about</h2>
 						<ul>
-							<li>OWASP Top 10</li>
-							<li>Single Sign On / Enterprise Level</li>
+							<li class="fragment">OWASP Top 10</li>
+							<li class="fragment">Single Sign On / Enterprise Level</li>
 						</ul>
 					</section>
 					<section class="stretch">
 						<div data-markdown>
 							<textarea data-template>
 							## This talk is for anyone building the following:
-							- Modern (single page) Web App
-							- Progressive Web App (PWA)
-							- Mobile App
-							- Restful API
+							- (Traditional) Web App (SPA)<!-- .element: class="fragment" -->
+							- Progressive Web App (PWA)<!-- .element: class="fragment" -->
+							- Mobile App<!-- .element: class="fragment" -->
+							- Restful API<!-- .element: class="fragment" -->
 							</textarea>
 						</div>
 					</section>
@@ -69,12 +69,9 @@
 
 				<section data-background-image="img/pexels-photo-133070_film.jpeg" >
 					<div class="stretch">
-						<h2>Three main goals</h2>
-						<ol>
-							<li>Help my forgetfullnes</li>
-							<li>Treat people's data with care</li>
-							<li>Empower the people</li>
-						</ol>
+						<h2 class="fragment">Solve A Need</h2>
+						<h2 class="fragment">Empower The People</h2>
+						<h2 class="fragment">Protect Personal Data</h2>
 					</div>
 				</section>
 
@@ -97,8 +94,8 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
-				width: 1600,
-				height: 900,
+				width: 1600 * .875,
+				height: 900 * .875,
 				history: true,
                 markdown: {
                     smartypants: true,

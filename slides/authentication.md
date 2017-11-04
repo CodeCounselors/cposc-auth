@@ -54,23 +54,23 @@ note:
 - How JWT was captured
 - How is a JWT Generated...
 
+VSLIDE
+<!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" style="color:white" -->
+### JWT in Action <!-- .element: style="color:#FFF" -->
+![Auth0 Handshake](img/auth0-seq.png)
 
 VSLIDE
 <!-- .element data-background-image="img/pexels-photo-325229-servers.jpeg" -->
 ## Simple as that, right? <!-- .element: style="color:white" -->
-1. Is JWT better than stateful sessions? <!-- .element: class="fragment" style="color:white" -->
-1. JWT Signing Options <!-- .element: class="fragment" style="color:white" -->
-    - HS256; Symetric (Shared Secrets)
-    - RS256; Assymetric (Public/Private Keys) <!-- .element: class="fragment highlight-green" -->
+- Are JWTs better than stateful sessions? <!-- .element: class="fragment" style="color:white" -->
+- JWT Signing Options <!-- .element: class="fragment" style="color:white" -->
+    - HS256; Symetric (Shared Secrets) <!-- .element: class="fragment" style="color:white" -->
+    - RS256; Assymetric (Public/Private Keys) <!-- .element: class="fragment" style="color:white"-->
    
    
     
 SLIDE
 # Implementing Auth0 Authentication
-
-VSLIDE			
-## How it works
-![Auth0 Handshake](img/auth0-seq.png)
 
 VSLIDE
 ## The Auth0 Client Object
@@ -78,7 +78,7 @@ VSLIDE
 
 ```javascript
 import auth0 from 'auth0-js'
-...
+
 export default class AuthService extends EventEmitter {
 
 	auth0 = new auth0.WebAuth({
@@ -93,7 +93,6 @@ export default class AuthService extends EventEmitter {
 	...
 }
 ```
-<!-- .element class="stretch" data-trim contenteditable -->
 
 VSLIDE
 ## Authentication Object (client state)
@@ -106,11 +105,9 @@ export default class AuthService extends EventEmitter {
 		this.auth0.authorize()
 	}
 	setSession(authResult) {
-		localStorage.setItem('access_token', authResult.accessToken)
 		localStorage.setItem('id_token', authResult.idToken)
 	}
 	logout() {
-		localStorage.removeItem('access_token')
 		localStorage.removeItem('id_token')
 	}
 	getProfile() {
@@ -118,29 +115,32 @@ export default class AuthService extends EventEmitter {
 	}
 }
 ```
+<!-- .element class="stretch" data-trim contenteditable -->
 
 VSLIDE
 ## Authentication Triggers
 ### routes.js
 ```jsx
-...
-	const requireAuth = (nextState, replace) => {
-		if (!auth.loggedIn()) { replace({pathname: '/login'}) }
-	}
-	const handleAuthentication = (nextState, replace) => {
-		if (/access_token|id_token|error/.test(nextState.location.hash)) {
-			auth.handleAuthentication()
-		}
-	}
-	export const makeRoutes = () => {
-		return (
-			&lt;Route path="/" component={Container} auth={auth}&gt;
-				&lt;IndexRedirect to="/home"/&gt;
-				&lt;Route path="login" component={Login} onEnter={handleAuthentication} /&gt;
-				&lt;Route path="home" component={Home} onEnter={requireAuth}>
-			&lt;/Route&gt;
-		)
-	}
+import {Route, IndexRedirect} from 'react-router'
+
+const requireAuth = (nextState, replace) => {
+    if (!auth.loggedIn()) { replace({pathname: '/login'}) }
+}
+
+const handleAuthentication = (nextState, replace) => {
+    if (/access_token|id_token|error/.test(nextState.location.hash)) {
+        auth.handleAuthentication()
+    }
+}
+
+export const makeRoutes = () => {
+    return (
+        <Route path="/" component={Container} auth={auth}>
+            <IndexRedirect to="/home"/>
+            <Route path="login" component={Login} onEnter={handleAuthentication} />
+            <Route path="home" component={Home} onEnter={requireAuth}>
+        </Route>
+    )
 }
 ```
 <!-- .element class="stretch" data-trim contenteditable -->
@@ -185,12 +185,12 @@ app.use('/api', apiMiddleware, api)
 <!-- .element class="stretch" data-trim contenteditable -->
 
 VSLIDE
-## Lets see it in action</h2>
+## Lets see it in action
 ### https://cposc-jwt.pictoriald.com
 ## What's Missing? <!-- .element: class="fragment" -->		
 
 SLIDE
-<!-- .element data-background-image="img/crosswalks.jpeg" -->
+<!-- .element data-background-image="img/photo-1424764016210-9482f49dde7f.jpeg" -->
 ## Authorization!
 ### Answers the question: <!-- .element style="color:#859900" class="fragment" -->
 Are you permitted to perform the action you are attempting? <!-- .element: class="fragment" -->
@@ -204,6 +204,7 @@ Are you permitted to perform the action you are attempting? <!-- .element: class
 
 
 VSLIDE
+<!-- .element data-background-image="img/photo-1424764016210-9482f49dde7f.jpeg" -->
 ## Goals
     
 1. Maintainability (No boilerplate) <!-- .element: class="fragment" -->
@@ -213,6 +214,7 @@ VSLIDE
 1. Open Source! <!-- .element: class="fragment" -->
     
 VSLIDE
+<!-- .element data-background-image="img/photo-1424764016210-9482f49dde7f.jpeg" -->
 ## Options
 
 - Frameworks (Sails, Loopback, etc)
@@ -231,17 +233,22 @@ VSLIDE
 const ACL = require('acl')
 const acl = new ACL(new ACL.memoryBackend(), logger)
 
+// Construct Organization Role Names
 const orgAdminRole = orgId => `org-admin-role-${orgId}`
 const orgRole = orgId => `org-role-${orgId}`
+
+// Map each role to a API Route
 const allowOrgRole = (orgId) => {
 	acl.allow(orgRole(orgId),      `/api/organizations/${orgId}`,          'get')
 	acl.allow(orgAdminRole(orgId), `/api/organizations/${orgId}/families`, '*')
 }
 
+// Scan the database for organizations and setup the ACLs for each
 queries.getAllOrganizations().then(orgs => orgs.forEach(o => {
   allowOrgRole(o.id)
 }))
 ```
+<!-- .element class="stretch" data-trim contenteditable -->
 
 VSLIDE
 ## Node-ACL :  Users
@@ -275,9 +282,9 @@ router.get('/users/auths/:authId', (req, res, next) => {...})
 router.put('/users/:userId', acl.middleware(), (req, res, next) => {...}) 
 
 // ACL Middleware, route wildcarded
-// Over in app.js: app.use('/api', apiMiddleware, api) 
 router.get('/organizations/:orgId/families', acl.middleware(3), (req, res, next) => {...})
 ```
+    
 
 VSLIDE
 ## Route Design for Role Based Security
@@ -294,7 +301,7 @@ router.delete('/organizations/:orgId/families/:familyId',  acl.middleware(4), ..
 
 ```
 
-### Remember how we defined the roles <!-- .element: class="fragment" --> 
+### Remember how we defined the roles: <!-- .element: class="fragment" --> 
 ```javascript 
 const allowOrgRole = (orgId) => {
 	acl.allow(orgRole(orgId),      `/api/organizations/${orgId}`,          'get')
@@ -302,6 +309,9 @@ const allowOrgRole = (orgId) => {
 }
 ```
 <!-- .element: class="fragment" -->
+
+VSLIDE
+# Where you expecting more?
 
 SLIDE
 # Summary
@@ -322,4 +332,3 @@ VSLIDE
 ## Thank You!
 ### @codecounselor
 ### https://codecounselors.github.io/cposc-auth
-### https://github.com/CodeCounselors/cposc-auth
