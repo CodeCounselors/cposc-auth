@@ -187,6 +187,8 @@ app.use('/api', apiMiddleware, api)
 VSLIDE
 ## Lets see it in action
 ### https://cposc-jwt.pictoriald.com
+#### username: demo@pictoriald.com
+#### password: demo
 ## What's Missing? <!-- .element: class="fragment" -->		
 
 SLIDE
@@ -225,6 +227,8 @@ VSLIDE
 VSLIDE
 ## Lets see it in action
 ### https://cposc-acl.pictoriald.com
+#### username: demo@pictoriald.com
+#### password: demo
 
 VSLIDE
 ## Node-ACL :  Roles
